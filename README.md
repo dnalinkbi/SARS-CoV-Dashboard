@@ -14,6 +14,17 @@ PacBio SARS-CoV Analysis Dashboard
 
 ## Run
 
+### Create conda env
+```
+conda env create -f conda.env.yaml
+```
+
+### Activate conda env
+```
+conda activate SARSCoV
+```
+
+### Run script
 ```
 python app.py
 ```
