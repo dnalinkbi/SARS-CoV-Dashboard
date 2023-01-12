@@ -79,20 +79,20 @@ covid = covid_table(input_file_list())
 covid_groupby_clade = groupby_clade(covid)
 covid_qcgood = QC_table(covid, "good")
 covid_qcgood_groupby_clade = groupby_clade(covid_qcgood)
-
+etc_list = ['20C', '20I (Alpha, V1)', '21C (Epsilon)', '21I (Delta)', '21K (Omicron)', '22A (Omicron)', '22C (Omicron)', 'recombinant']
 #print(total_summary(covid))
 
 
 
 # DASH APP INSTANCE
 dbc_css = "https://cdn.jsdelivr.net/gh/AnnMarieW/dash-bootstrap-templates/dbc.min.css"
-app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP, dbc_css])
+app = Dash(__name__, external_stylesheets=[dbc.themes.SANDSTONE, dbc_css])
 
 # DASH LAYOUT
 app.layout = dbc.Container([
 	# Title
 	html.Div([
-		html.H1(children='DNA LINK SARS-CoV-Analysis DASH BOARD', className="bg-primary text-white p-2 mb-2 text-center"),
+		html.H1(children='DNA LINK SARS-CoV-Analysis DASH BOARD', className="bg-primary text-white text-center"),
 	]),
 	
 	html.Div([
@@ -147,6 +147,7 @@ app.layout = dbc.Container([
 
 			# ===== FILTERED TABLE DOWNLOAD BUTTON ===== #
 			html.Div([
+				dcc.Download(id="download-full"),
 				dcc.Download(id="download-filtered"),
 				dcc.Dropdown(
 					options=[
@@ -156,6 +157,7 @@ app.layout = dbc.Container([
 					id="download-filtered-dropdown",
 					placeholder="Choose download file type."
 				),
+				html.Button("Download Total Data", id="btn_full"),
 				html.Button("Download Filtered Data", id="btn_filtered"),
 
 				# ===== FILTERED TABLE ===== #
@@ -167,7 +169,13 @@ app.layout = dbc.Container([
 					sort_mode='multi',
 					page_size=10,
 					style_table={'overflowX': 'auto'}
-				)
+				),
+			]),
+
+			# ===== SUNBRUST PLOT ===== #
+			html.Div([
+				html.H2(children='Clade & Pango Sunbrust Plot'),
+				dcc.Graph(id='sunburst-graph')
 			])
 		], style={'width': '45%', 'padding': 5, 'margin': 20, 'flex': 1}),
 
@@ -195,47 +203,6 @@ app.layout = dbc.Container([
 				dcc.Graph(id='reads-boxplot', style={'height': '40vh'}),
 			]),
 
-			# ===== DATATABLE ===== #
-			html.Div([
-				# ===== FULL TABLE DOWNLOAD BUTTON ===== #
-				dcc.Download(id="download-full"),
-				dcc.Dropdown(
-					options=[
-						{"label": "Excel file", "value": "excel"},
-                    	{"label": "CSV file", "value": "csv"},
-                    ],
-					id="download-full-dropdown",
-					placeholder="Choose download file type."
-				),
-				html.Button("Download Total Data", id="btn_full"),
-
-				# ===== FULL TABLE ===== #
-				dash_table.DataTable(
-					data=covid.to_dict('records'),
-					columns=[{'id':c, 'name':c} for c in covid.columns],
-					fixed_rows={'headers': True},
-					editable=True,
-					sort_action='native',
-					sort_mode='multi',
-					page_size=10,
-					filter_action='native',
-					style_data_conditional=[
-						{
-							'if':{'filter_query': '{QC} = good', 'column_id': 'QC'},
-							'backgroundColor': 'dodgerblue',
-							'color': 'white'
-						},
-						{
-							'if':{'filter_query': '{QC} = mediocre', 'column_id': 'QC'},
-							'backgroundColor': 'yellow',
-						},
-						{
-							'if':{'filter_query': '{QC} = bad', 'column_id': 'QC'},
-							'backgroundColor': 'red',
-							'color': 'white'
-						}]
-				),
-			])
 		], style={'width': '50%', 'padding': 5, 'flex': 1})
 	], style={'display': 'flex', 'flex-direction': 'row'})
 ], fluid=True, className="dbc")
@@ -246,7 +213,7 @@ app.layout = dbc.Container([
 
 
 
-# ===== BAR PLOT CALLBACK ===== #
+# ===== STACKED BAR PLOT CALLBACK ===== #
 @app.callback(
 	Output('groupby_clade_count', 'figure'),
 	Output('groupby_clade_percent', 'figure'),
@@ -284,11 +251,12 @@ def clade_graph(clade, cov, qc, round):
 
 
 
-# ===== BOX PLOT CALLBACK ===== #
+# ===== BOX PLOT & SUNBRUST PLOT CALLBACK ===== #
 @app.callback(
 	Output('depth-boxplot', 'figure'),
 	Output('reads-boxplot', 'figure'),
 	Output('filtered-table', 'data'),
+	Output("sunburst-graph", "figure"),
 	[Input('check-clade', 'value')],
 	Input('filter-cov', 'value'),
 	Input('filter-qc', 'value'),
@@ -311,11 +279,22 @@ def boxplot(clade, cov, qc, round):
 	# clade
 	if 'All' in clade:
 		dff = df_qc[(df_qc['round'] >= round[0]) & (df_qc['round'] <= round[1])]
+	elif 'etc' in clade:
+		dff = df_qc[(df_qc['round'] >= round[0]) & (df_qc['round'] <= round[1]) & (df_qc['clade'].isin(clade + etc_list))]
 	else:
 		dff = df_qc[(df_qc['round'] >= round[0]) & (df_qc['round'] <= round[1]) & (df_qc['clade'].isin(clade))]
+
+	# sunbrust-data-parsing
+	dff_sun = dff.groupby(['clade', 'pango'])['sample'].count().to_frame()
+	dff_sun.reset_index(inplace=True)
+	dff_sun.columns = 'clade', 'pango', 'count'
+	
+	# make figure
 	fig_depth = px.box(dff, x='round', y='depth')
 	fig_reads = px.box(dff, x='round', y='totalreads')
-	return fig_depth, fig_reads, dff.to_dict('records')
+	fig_sun = px.sunburst(dff_sun, path=['clade', 'pango'], values='count', color='clade')
+	
+	return fig_depth, fig_reads, dff.to_dict('records'), fig_sun
 
 
 
@@ -323,7 +302,7 @@ def boxplot(clade, cov, qc, round):
 @app.callback(
 	Output("download-full", "data"),
 	Input("btn_full", "n_clicks"),
-	State("download-full-dropdown", "value"),
+	State("download-filtered-dropdown", "value"),
 	prevent_initial_call=True,
 )
 def func(n_clicks_btn, download_type):
@@ -347,9 +326,6 @@ def func(n_clicks_btn, df, download_type):
 		return dcc.send_data_frame(filtered_df.to_csv, "SARS-COVID.Filtered.csv")
 	else:
 		return dcc.send_data_frame(filtered_df.to_excel, "SARS-COVID.Filtered.xlsx")
-
-
-
 
 
 
