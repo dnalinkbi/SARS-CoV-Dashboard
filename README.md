@@ -14,6 +14,17 @@ PacBio SARS-CoV Analysis Dashboard
 
 ## Run
 
+### Create conda env
+```
+conda env create -f conda.env.yaml
+```
+
+### Activate conda env
+```
+conda activate SARSCoV
+```
+
+### Run script
 ```
 python app.py
 ```
@@ -23,3 +34,6 @@ python app.py
 
 [Dash board link](http://211.174.205.41:8050/)
 
+
+
+**Made in DNALINK** by SungYong Baek
