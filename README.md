@@ -21,5 +21,5 @@ python app.py
 ## View Dashboard
 
 
-[http://211.174.205.41:8050/](http://211.174.205.41:8050/)
+[Dash board link](http://211.174.205.41:8050/)
 
