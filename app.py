@@ -16,7 +16,6 @@ from dash_bootstrap_templates import ThemeChangerAIO, template_from_url, load_fi
 warnings.filterwarnings(action='ignore')
 
 
-
 def input_file_list():
 	path = "./input_report_files/"
 	file_list = glob.glob(path + "./*트.xlsx")
@@ -72,112 +71,179 @@ def clade_count(df):
 	return df
 
 
-
-
 # COVID DATAFRAME
 covid = covid_table(input_file_list())
 covid_groupby_clade = groupby_clade(covid)
 covid_qcgood = QC_table(covid, "good")
 covid_qcgood_groupby_clade = groupby_clade(covid_qcgood)
 etc_list = ['20C', '20I (Alpha, V1)', '21C (Epsilon)', '21I (Delta)', '21K (Omicron)', '22A (Omicron)', '22C (Omicron)', 'recombinant']
-#print(total_summary(covid))
+
+
+# ===== QC FILTER ===== #
+qc_filter_card = dbc.Card(
+	dbc.CardBody([
+		html.H2(children='QC filtering'),
+		dcc.RadioItems(
+			np.append(['All'], covid['QC'].unique()),
+			'All',
+			id='filter-qc',
+		)
+	]), className="mb-3 shadow",
+)
+
+# ===== COVERAGE FILTER ===== #
+coverage_filter_card = dbc.Card(
+	dbc.CardBody([
+		html.H2(children='Coverage filtereing'),
+		dcc.RadioItems(
+			['All', '>=90%', '<90%'],
+			'All',
+			id='filter-cov',
+		)
+	]), className="mb-3 shadow",
+)
+
+# ===== CLADE FILTER ===== #
+clade_filter_card = dbc.Card(
+	dbc.CardBody([
+		html.H2(children='Clade CheckList'),
+		dbc.Checklist(
+			np.append(['All'], sorted(covid_groupby_clade['clade'].unique())),
+			['All'],
+			id='check-clade'
+		)
+	]), className="mb-3 shadow",
+)
+
+# ===== ROUND RANGE ===== #
+round_range_card = dbc.Card(
+	dbc.CardBody([
+		html.H2(children='Round Range'),
+		dcc.RangeSlider(
+			covid_groupby_clade['round'].min(),
+			covid_groupby_clade['round'].max(),
+			step=1,
+			value=[covid_groupby_clade['round'].min(),covid_groupby_clade['round'].max()],
+			allowCross=False,
+			marks={str(round): str(round) for round in range(covid_groupby_clade['round'].min(), covid_groupby_clade['round'].max()+1, 30)},
+			tooltip={"placement": "bottom", "always_visible": True},
+			id='round_slider_value',
+		)
+	]), className="mb-3 shadow",
+)
+
+# ===== CLADE DATATABLE ===== #
+total_clade_count_card = dbc.Card(
+	dbc.CardBody([
+		html.H2(children='Total Clade Count'),
+		dash_table.DataTable(
+			data=clade_count(covid).to_dict('records'),
+			columns=[{'id':c, 'name':c} for c in clade_count(covid).columns],
+			fixed_rows={'headers': True},
+			sort_action="native",
+			sort_mode='multi',
+			editable=True,
+		)
+	]), className="mb-3 shadow"
+)
+
+# ===== SUNBRUST PLOT ===== #
+sunbrust_card = dbc.Card(
+	dbc.CardBody([
+		html.H2(children='Clade & Pango Sunbrust Plot'),
+		dcc.Graph(id='sunburst-graph')
+	]), className="mb-3 shadow"
+)
+
+# ===== DATATABLE ===== #
+datatable_card = dbc.Card(
+	dbc.CardBody([
+		html.H2(children='Data Table'),
+
+		dcc.Download(id="download-full"),
+		dcc.Download(id="download-filtered"),
+		
+		dbc.Row([
+			dbc.Col(
+				html.Div(
+					dcc.Dropdown(
+						options=[
+							{"label": "Excel file", "value": "excel"},
+	                    	{"label": "CSV file", "value": "csv"},
+	                    ],
+						id="download-filtered-dropdown",
+						placeholder="Choose download file type."
+					),
+				), width=6
+			),
+			dbc.Col(
+				html.Div(dbc.Button("Download Total Data", id="btn_full", color="primary"),)
+			),
+			dbc.Col(
+				html.Div(dbc.Button("Download Filtered Data", id="btn_filtered", color="success"),)
+			)
+		], className="mb-2", justify='end'),
+
+		# ===== FILTERED TABLE ===== #
+		dash_table.DataTable(
+			id='filtered-table',
+			columns=[{'id':c, 'name':c} for c in covid.columns],
+			fixed_rows={'headers': True},
+			sort_action="native",
+			sort_mode='multi',
+			page_size=10,
+			style_table={'overflowX': 'auto'}
+		),
+	]), className="mb-3 shadow"
+)
 
 
 
-# DASH APP INSTANCE
+
+# ===== DASH APP INSTANCE ===== #
 dbc_css = "https://cdn.jsdelivr.net/gh/AnnMarieW/dash-bootstrap-templates/dbc.min.css"
 app = Dash(__name__, external_stylesheets=[dbc.themes.SANDSTONE, dbc_css])
 
-# DASH LAYOUT
+# ===== DASH LAYOUT ===== #
 app.layout = dbc.Container([
-	# Title
+	# ===== Title ===== #
 	html.Div([
-		html.H1(children='DNA LINK SARS-CoV-Analysis DASH BOARD', className="bg-primary text-white text-center"),
+		html.H1(children='DNA LINK SARS-CoV-Analysis DASH BOARD', className="bg-primary text-white text-center fw-bold"),
 	]),
 	
 	html.Div([
 		# ===== LEFT LAYOUT ===== #
 		html.Div(children=[
+			
 			# ===== QC FILTER ===== #
-			html.Div([
-				html.H2(children='QC filtering'),
-				dcc.RadioItems(
-					np.append(['All'], covid['QC'].unique()),
-					'All',
-					id='filter-qc',
-				)]),
+			qc_filter_card,
+			
 			# ===== COVERAGE FILTER ===== #
-			html.Div([
-				html.H2(children='Coverage filtereing'),
-				dcc.RadioItems(
-					['All', '>=90%', '<90%'],
-					'All',
-					id='filter-cov',
-				)]),
+			coverage_filter_card,
+			
 			# ===== CLADE FILTER ===== #
-			html.Div([
-				html.H2(children='Clade CheckList'),
-				dbc.Checklist(
-					np.append(['All'], sorted(covid_groupby_clade['clade'].unique())),
-					['All'],
-					id='check-clade',
-				)]),
+			clade_filter_card,
+
 			# ===== ROUND RANGE ===== #
+			round_range_card,
+			
+			# ===== CLADE DATATABLE & SUNBRUST PLOT ===== #
 			html.Div([
-				html.H2(children='Round Range'),
-				dcc.RangeSlider(
-					covid_groupby_clade['round'].min(),
-					covid_groupby_clade['round'].max(),
-					step=1,
-					value=[covid_groupby_clade['round'].min(),covid_groupby_clade['round'].max()],
-					allowCross=False,
-					marks={str(round): str(round) for round in range(covid_groupby_clade['round'].min(), covid_groupby_clade['round'].max()+1, 10)},
-					tooltip={"placement": "bottom", "always_visible": True},
-					id='round_slider_value',
-				)]),
-			# ===== DATATABLE ===== #
-			html.Div([
-				html.H2(children='Total Sample Clade Count'),
-				dash_table.DataTable(
-					data=clade_count(covid).to_dict('records'),
-					columns=[{'id':c, 'name':c} for c in clade_count(covid).columns],
-					fixed_rows={'headers': True},
-					editable=True,
-				)]),
-
-			# ===== FILTERED TABLE DOWNLOAD BUTTON ===== #
-			html.Div([
-				dcc.Download(id="download-full"),
-				dcc.Download(id="download-filtered"),
-				dcc.Dropdown(
-					options=[
-						{"label": "Excel file", "value": "excel"},
-                    	{"label": "CSV file", "value": "csv"},
-                    ],
-					id="download-filtered-dropdown",
-					placeholder="Choose download file type."
-				),
-				html.Button("Download Total Data", id="btn_full"),
-				html.Button("Download Filtered Data", id="btn_filtered"),
-
-				# ===== FILTERED TABLE ===== #
-				dash_table.DataTable(
-					id='filtered-table',
-					columns=[{'id':c, 'name':c} for c in covid.columns],
-					fixed_rows={'headers': True},
-					sort_action="native",
-					sort_mode='multi',
-					page_size=10,
-					style_table={'overflowX': 'auto'}
-				),
+				dbc.Row([
+					dbc.Col(
+						total_clade_count_card, width=4
+					),
+					dbc.Col(
+						sunbrust_card,					
+					)
+				])
 			]),
 
-			# ===== SUNBRUST PLOT ===== #
+			# ===== DATA TABLE ===== #
 			html.Div([
-				html.H2(children='Clade & Pango Sunbrust Plot'),
-				dcc.Graph(id='sunburst-graph')
+				datatable_card
 			])
-		], style={'width': '45%', 'padding': 5, 'margin': 20, 'flex': 1}),
+		], style={'width': '35%', 'padding': 5, 'margin': 20, 'flex': 1}),
 
 
 		# ===== RIGHT LAYOUT =====
