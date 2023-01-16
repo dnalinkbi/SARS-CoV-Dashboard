@@ -88,7 +88,7 @@ qc_filter_card = dbc.Card(
 			'All',
 			id='filter-qc',
 		)
-	]), className="mb-3 shadow",
+	]), className="m-1 shadow",
 )
 
 # ===== COVERAGE FILTER ===== #
@@ -100,7 +100,7 @@ coverage_filter_card = dbc.Card(
 			'All',
 			id='filter-cov',
 		)
-	]), className="mb-3 shadow",
+	]), className="m-1 shadow",
 )
 
 # ===== CLADE FILTER ===== #
@@ -112,7 +112,7 @@ clade_filter_card = dbc.Card(
 			['All'],
 			id='check-clade'
 		)
-	]), className="mb-3 shadow",
+	]), className="m-1 shadow",
 )
 
 # ===== ROUND RANGE ===== #
@@ -129,7 +129,7 @@ round_range_card = dbc.Card(
 			tooltip={"placement": "bottom", "always_visible": True},
 			id='round_slider_value',
 		)
-	]), className="mb-3 shadow",
+	]), className="m-1 shadow",
 )
 
 # ===== CLADE DATATABLE ===== #
@@ -144,15 +144,15 @@ total_clade_count_card = dbc.Card(
 			sort_mode='multi',
 			editable=True,
 		)
-	]), className="mb-3 shadow"
+	]), className="m-1 shadow"
 )
 
 # ===== SUNBRUST PLOT ===== #
 sunbrust_card = dbc.Card(
 	dbc.CardBody([
 		html.H2(children='Clade & Pango Sunbrust Plot'),
-		dcc.Graph(id='sunburst-graph')
-	]), className="mb-3 shadow"
+		dcc.Graph(id='sunburst-graph', style={'height': '80vh'})
+	]), className="m-1 shadow"
 )
 
 # ===== DATATABLE ===== #
@@ -182,7 +182,7 @@ datatable_card = dbc.Card(
 			dbc.Col(
 				html.Div(dbc.Button("Download Filtered Data", id="btn_filtered", color="success"),)
 			)
-		], className="mb-2", justify='end'),
+		], className="m-2", justify='end'),
 
 		# ===== FILTERED TABLE ===== #
 		dash_table.DataTable(
@@ -194,82 +194,99 @@ datatable_card = dbc.Card(
 			page_size=10,
 			style_table={'overflowX': 'auto'}
 		),
-	]), className="mb-3 shadow"
+	]), className="m-1 shadow"
+)
+
+# ===== BAR PLOT ===== #
+barplot = dbc.Card(
+	dbc.CardBody([
+		html.H2(children="Clade BarPlot"),
+		dbc.Row([
+			# ===== ROUND X COUNT BAR PLOT ===== #
+			html.Div([
+				dcc.Graph(id='groupby_clade_count', style={'height': '40vh'}),
+			]),
+			# ===== ROUND X PERCENT BAR PLOT ===== #
+			html.Div([
+				dcc.Graph(id='groupby_clade_percent', style={'height': '40vh'}),
+			])
+		])
+	]), className="m-1 shadow"
+)
+
+# ===== BOX PLOT ===== #
+boxplot = dbc.Card(
+	dbc.CardBody([
+		html.H2(children="Depth & Reads BoxPlot"),
+		dbc.Row([
+			# ===== DEPTH BOX PLOT ===== #
+			html.Div([
+				dcc.Graph(id='depth-boxplot', style={'height': '40vh'}),
+			]),
+			# ===== TOTAL READS BOX PLOT ===== #
+			html.Div([
+				dcc.Graph(id='reads-boxplot', style={'height': '40vh'}),
+			])
+		])
+	]), className="m-1 shadow"
 )
 
 
-
-
+#===============================#
 # ===== DASH APP INSTANCE ===== #
+#===============================#
 dbc_css = "https://cdn.jsdelivr.net/gh/AnnMarieW/dash-bootstrap-templates/dbc.min.css"
-app = Dash(__name__, external_stylesheets=[dbc.themes.SANDSTONE, dbc_css])
+app = Dash(__name__, external_stylesheets=[dbc.themes.COSMO, dbc_css])
 
 # ===== DASH LAYOUT ===== #
 app.layout = dbc.Container([
 	# ===== Title ===== #
 	html.Div([
-		html.H1(children='DNA LINK SARS-CoV-Analysis DASH BOARD', className="bg-primary text-white text-center fw-bold"),
+		html.H1(children='DNALINK SARS-CoV-Analysis DASH BOARD', className="bg-primary bg-gradient text-white text-center fw-bold p-3 m-2"),
 	]),
 	
+	
 	html.Div([
+		
 		# ===== LEFT LAYOUT ===== #
 		html.Div(children=[
-			
-			# ===== QC FILTER ===== #
-			qc_filter_card,
-			
-			# ===== COVERAGE FILTER ===== #
-			coverage_filter_card,
-			
-			# ===== CLADE FILTER ===== #
-			clade_filter_card,
-
 			# ===== ROUND RANGE ===== #
 			round_range_card,
+
 			
-			# ===== CLADE DATATABLE & SUNBRUST PLOT ===== #
 			html.Div([
 				dbc.Row([
+					dbc.Col([
+						# ===== COVERAGE FILTER ===== #
+						coverage_filter_card,
+						# ===== QC FILTER ===== #
+						qc_filter_card,
+						# ===== CLADE FILTER ===== #
+						clade_filter_card,
+						total_clade_count_card,
+					], width=4),
 					dbc.Col(
-						total_clade_count_card, width=4
-					),
-					dbc.Col(
-						sunbrust_card,					
+						sunbrust_card, width=8
 					)
-				])
+				], className="g-1")
 			]),
+
+			
+
 
 			# ===== DATA TABLE ===== #
 			html.Div([
 				datatable_card
-			])
-		], style={'width': '35%', 'padding': 5, 'margin': 20, 'flex': 1}),
+			]),
+		], style={'width': '45%', 'padding': 5, 'flex': 1}),
 
 
 		# ===== RIGHT LAYOUT =====
 		html.Div(children=[
+			barplot,
+			boxplot
+		], style={'width': '45%', 'padding': 5, 'flex': 1})
 
-			# ===== ROUND X COUNT BAR PLOT ===== #
-			html.Div([
-				dcc.Graph(id='groupby_clade_count', style={'height': '40vh'}),
-			]),
-
-			# ===== ROUND X PERCENT BAR PLOT ===== #
-			html.Div([
-				dcc.Graph(id='groupby_clade_percent', style={'height': '40vh'}),
-			]),
-
-			# ===== DEPTH BOX PLOT ===== #
-			html.Div([
-				dcc.Graph(id='depth-boxplot', style={'height': '40vh'}),
-			]),
-
-			# ===== TOTAL READS BOX PLOT ===== #
-			html.Div([
-				dcc.Graph(id='reads-boxplot', style={'height': '40vh'}),
-			]),
-
-		], style={'width': '50%', 'padding': 5, 'flex': 1})
 	], style={'display': 'flex', 'flex-direction': 'row'})
 ], fluid=True, className="dbc")
 
@@ -310,9 +327,8 @@ def clade_graph(clade, cov, qc, round):
 		dfc = dfp[dfp['clade'].isin(clade)]
 	
 	# make plot	
-	fig_count = px.bar(dfc, x='round', y='count', color='clade', color_discrete_map={'22B (Omicron)': 'gray', 'etc': 'yellow'})
-	#fig_count = px.line(dfc, x='round', y='count', color='clade')
-	fig_percent = px.bar(dfp, x='round', y='percent', color='clade', color_discrete_map={'22B (Omicron)': 'gray', 'etc': 'yellow'})
+	fig_count = px.bar(dfc, x='round', y='count', color='clade', title='Clade Count BarPlot', color_discrete_map={'22B (Omicron)': 'gray', 'etc': 'yellow'})
+	fig_percent = px.bar(dfp, x='round', y='percent', color='clade', title='Clade Percent BarPlot', color_discrete_map={'22B (Omicron)': 'gray', 'etc': 'yellow'})
 	return fig_count, fig_percent
 
 
@@ -356,8 +372,8 @@ def boxplot(clade, cov, qc, round):
 	dff_sun.columns = 'clade', 'pango', 'count'
 	
 	# make figure
-	fig_depth = px.box(dff, x='round', y='depth')
-	fig_reads = px.box(dff, x='round', y='totalreads')
+	fig_depth = px.box(dff, x='round', y='depth', title='Depth BoxPlot')
+	fig_reads = px.box(dff, x='round', y='totalreads', title='Total Reads BoxPlot')
 	fig_sun = px.sunburst(dff_sun, path=['clade', 'pango'], values='count', color='clade')
 	
 	return fig_depth, fig_reads, dff.to_dict('records'), fig_sun
@@ -398,4 +414,4 @@ def func(n_clicks_btn, df, download_type):
 
 
 if __name__ == '__main__':
-    app.run_server(host='211.174.205.41', port='8050', debug=True)
+    app.run_server(host='211.174.205.41', port='8050', debug=True, use_reloader=True)
