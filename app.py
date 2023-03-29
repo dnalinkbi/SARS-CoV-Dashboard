@@ -21,7 +21,9 @@ warnings.filterwarnings(action='ignore')
 #23_023_PAC_03 -> 23_023_03
 
 def input_file_list(folder_path):
-	#path = "./input_report_files/2022/"
+	# 해당 폴더 경로 내의 모든 xlsx 파일을 리스트로 반환하는 함수
+	# folder_path: 파일 리스트를 가져올 폴더 경로
+	# glob.glob() 함수를 사용하여 폴더 내의 모든 xlsx 파일을 가져옴
 	file_list = glob.glob(folder_path + "/./*xlsx")
 	return file_list
 
@@ -94,6 +96,7 @@ covid_2023 = covid_table(input_file_list("/denovo/workspace.bsy/work/SEQUEL/COVI
 covid_2022.insert(0, 'year', '2022')
 covid_2023.insert(0, 'year', '2023')
 covid = pd.concat([covid_2022,covid_2023])
+covid = covid.sort_values('totalreads').drop_duplicates('sample', keep='last')
 covid_groupby_clade = groupby_clade(covid)
 covid_qcgood = QC_table(covid, "good")
 covid_qcgood_groupby_clade = groupby_clade(covid_qcgood)
@@ -184,7 +187,7 @@ total_clade_count_card = dbc.Card(
 sunbrust_card = dbc.Card(
 	dbc.CardBody([
 		html.H4(children='Clade & Pango Sunbrust Plot'),
-		dcc.Graph(id='sunburst-graph', style={'height': '45vh'})
+		dcc.Graph(id='sunburst-graph', style={'height': '35vh'})
 	]), className="m-2 shadow"
 )
 
@@ -225,10 +228,26 @@ datatable_card = dbc.Card(
 			sort_action="native",
 			sort_mode='multi',
 			page_size=20,
-			style_table={'overflowX': 'auto'}
+			style_table={'overflowX': 'auto'},
+			style_data={'whiteSpace': 'normal', 'height':'auto'}
 		),
 	]), className="m-2 shadow"
 )
+
+
+# ===== PASS or FAIL BAR PLOT ===== #
+pass_barplot = dbc.Card(
+	dbc.CardBody([
+		html.H4(children="Pass/Fail"),
+		dbc.Row([
+			# ===== BATCH X P/F BAR PLOT ===== #
+			html.Div([
+				dcc.Graph(id='groupby_pass_count', style={'height': '25vh'}),
+			])
+		])
+	]), className="m-2 shadow"
+)
+
 
 # ===== BAR PLOT ===== #
 barplot = dbc.Card(
@@ -270,7 +289,7 @@ parallel_coordinates_plot = dbc.Card(
 		html.H4(children="Parallel Coordinates Plot"),
 		dbc.Row([
 			html.Div([
-				dcc.Graph(id='parallel_coordinates-plot'),
+				dcc.Graph(id='parallel_coordinates-plot', style={'height': '50vh'}),
 			])
 		])
 	]), className="m-2 shadow"
@@ -283,12 +302,22 @@ dbc_css = "https://cdn.jsdelivr.net/gh/AnnMarieW/dash-bootstrap-templates/dbc.mi
 app = Dash(__name__, external_stylesheets=[dbc.themes.FLATLY, dbc_css])
 
 # ===== DASH LAYOUT ===== #
+# |이 코드는 DNALINK SARS-CoV-Analysis 대시보드의 레이아웃을 구성하는 부분입니다.
+# |
+# |좋은 점:
+# |- dbc.Container를 사용하여 레이아웃을 구성하였습니다. 이를 통해 반응형 웹 디자인을 쉽게 구현할 수 있습니다.
+# |- html.Div를 사용하여 여러 개의 요소를 묶어주었습니다. 이를 통해 코드의 가독성을 높일 수 있습니다.
+# |- dbc.Row와 dbc.Col을 사용하여 그리드 시스템을 구성하였습니다. 이를 통해 요소들의 위치와 크기를 쉽게 조절할 수 있습니다.
+# |- dbc.Tabs를 사용하여 탭을 구성하였습니다. 이를 통해 여러 개의 그래프나 테이블 등을 한 화면에서 보여줄 수 있습니다.
+# |
+# |나쁜 점:
+# |- 주석이 부족합니다. 코드의 의도나 기능을 파악하기 어려울 수 있습니다.
+# |- 일부 요소들의 이름이 축약어로 되어 있어, 코드를 처음 접하는 사람들은 이해하기 어려울 수 있습니다.
 app.layout = dbc.Container([
 	# ===== Title ===== #
 	html.Div([
 		html.H1(children='DNALINK SARS-CoV-Analysis DASH BOARD', className="bg-primary bg-gradient text-white text-center fw-bold p-4 m-2"),
 	]),
-	
 	
 	html.Div([
 		
@@ -296,7 +325,6 @@ app.layout = dbc.Container([
 		html.Div(children=[
 			# ===== BATCH RANGE ===== #
 			batch_range_card,
-
 			
 			html.Div([
 				dbc.Row([
@@ -313,6 +341,9 @@ app.layout = dbc.Container([
 						#total_clade_count_card,
 					], width=5),
 					dbc.Col([
+						# ===== Pass/Fail Bar Plot ===== #
+						pass_barplot,
+						# ===== Clade & Pango Sunbrust Plot ===== #
 						sunbrust_card,
 					], width=7),
 					#dcc.Graph(id='indicator')
@@ -324,7 +355,6 @@ app.layout = dbc.Container([
 			#	datatable_card
 			#]),
 		], style={'width': '40%', 'padding': 5, 'flex': 1}),
-
 
 		# ===== RIGHT LAYOUT =====
 		html.Div([
@@ -345,7 +375,19 @@ app.layout = dbc.Container([
 
 
 
+
+
 # ===== STACKED BAR PLOT CALLBACK ===== #
+# |이 코드는 Dash 앱에서 사용되는 콜백 함수입니다. 이 함수는 사용자가 선택한 필터링 옵션에 따라 데이터를 처리하고, 그 결과를 두 개의 그래프로 시각화하여 출력합니다.
+# |
+# |좋은 점:
+# |- 코드가 간결하고 가독성이 좋습니다.
+# |- 함수 내에서 데이터 처리와 시각화가 모두 이루어지므로, 코드의 구조가 단순합니다.
+# |- 입력값과 출력값이 명확하게 정의되어 있어, 함수의 역할을 쉽게 이해할 수 있습니다.
+# |
+# |나쁜 점:
+# |- 함수의 인자가 다소 복잡합니다. 여러 개의 입력값과 리스트 형태의 입력값이 함께 사용되고 있습니다. 이로 인해 함수의 사용 방법이 다소 복잡해질 수 있습니다.
+# |- 함수 내에서 주석이 부족합니다. 함수의 역할과 각각의 처리 과정에 대한 설명이 부족하므로, 코드를 이해하는 데 어려움이 있을 수 있습니다.
 @app.callback(
 	Output('groupby_clade_count', 'figure'),
 	Output('groupby_clade_percent', 'figure'),
@@ -383,7 +425,7 @@ def clade_graph(year, clade, cov, qc, batch):
 		dfc = dfp
 	else:
 		dfc = dfp[dfp['clade'].isin(clade)]
-
+	
 	#fig_indi = go.Figure(go.Indicator(mode="delta", value=dfc[(dfc['batch'] == batch[1]) & (dfc['clade'] == "22B (Omicron)")]['count'].values[0], delta={"reference": dfc[(dfc['batch'] == batch[0]) & (dfc['clade'] == "22B (Omicron)")]['count'].values[0], "relative": True}))
 
 	# make plot	
@@ -400,6 +442,7 @@ def clade_graph(year, clade, cov, qc, batch):
 	Output('filtered-table', 'data'),
 	Output("sunburst-graph", "figure"),
 	Output("parallel_coordinates-plot", "figure"),
+	Output("groupby_pass_count", "figure"),
 	Input('filter-year', 'value'),
 	[Input('check-clade', 'value')],
 	Input('filter-cov', 'value'),
@@ -480,8 +523,12 @@ def boxplot(year, clade, cov, qc, batch):
 		)
 	)
 
+	dfpf = dff.groupby(['batch','P/F'], sort=False)['P/F'].count().unstack(fill_value=0).stack().to_frame()
+	dfpf.reset_index(inplace=True)
+	dfpf.columns = 'batch', 'P/F', 'count'
+	fig_pass = px.bar(dfpf, x='batch', y='count', color='P/F', color_discrete_map={'Pass': 'green', 'Fail': 'red'})
 
-	return fig_depth, fig_reads, dff.to_dict('records'), fig_sun, fig_parallel
+	return fig_depth, fig_reads, dff.to_dict('records'), fig_sun, fig_parallel, fig_pass
 
 
 
