@@ -32,7 +32,7 @@ python app.py
 ## View Dashboard
 
 
-[Dash board link](http://211.174.205.41:8050/)
+[Dash board link](http://211.174.205.41:8060/)
 
 
 
