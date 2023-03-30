@@ -91,6 +91,13 @@ def clade_count(df):
 
 
 # COVID DATAFRAME
+covid = pd.concat([covid_table(input_file_list("/denovo/workspace.bsy/work/SEQUEL/COVID/final_report/SARS-CoV-Dashboard/input_report_files/2022/")).assign(year='2022'),
+                   covid_table(input_file_list("/denovo/workspace.bsy/work/SEQUEL/COVID/final_report/SARS-CoV-Dashboard/input_report_files/2023/")).assign(year='2023')])
+covid = covid.sort_values('totalreads').drop_duplicates('sample', keep='last')
+covid_groupby_clade = groupby_clade(covid)
+covid_qcgood_groupby_clade = groupby_clade(QC_table(covid, "good"))
+etc_list = ['20C', '20I (Alpha, V1)', '21C (Epsilon)', '21I (Delta)', '21K (Omicron)', '22A (Omicron)', '22C (Omicron)', 'recombinant']
+"""
 covid_2022 = covid_table(input_file_list("/denovo/workspace.bsy/work/SEQUEL/COVID/final_report/SARS-CoV-Dashboard/input_report_files/2022/"))
 covid_2023 = covid_table(input_file_list("/denovo/workspace.bsy/work/SEQUEL/COVID/final_report/SARS-CoV-Dashboard/input_report_files/2023/"))
 covid_2022.insert(0, 'year', '2022')
@@ -101,7 +108,7 @@ covid_groupby_clade = groupby_clade(covid)
 covid_qcgood = QC_table(covid, "good")
 covid_qcgood_groupby_clade = groupby_clade(covid_qcgood)
 etc_list = ['20C', '20I (Alpha, V1)', '21C (Epsilon)', '21I (Delta)', '21K (Omicron)', '22A (Omicron)', '22C (Omicron)', 'recombinant']
-
+"""
 
 # ===== YEAR FILTER ===== #
 year_filter_card = dbc.Card(
