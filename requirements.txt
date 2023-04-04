@@ -131,8 +131,8 @@ rsa==4.9
 rst2ansi==0.1.5
 s3transfer==0.6.0
 scikit-misc==0.1.4
-setuptools==65.4.0
-setuptools-scm==7.0.5
+setuptools==67.6.1
+setuptools-scm==7.1.0
 sip==6.7.5
 six==1.16.0
 slacker==0.14.0
