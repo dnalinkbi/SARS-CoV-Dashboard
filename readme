@@ -13,3 +13,9 @@ git remote add dragonb6874 git@github.com-dragonb6874:dragonb6874/SARS-CoV-Dashb
 git push dragonb6874 +main
 
 
+
+heroku git:remote -a bsy-covid
+heroku buildpacks:set heroku/python
+heroku create --buildpack https://github.com/kennethreitz/conda-buildpack.git
+git push heroku main
+
