@@ -1,12 +1,12 @@
 aioeasywebdav==2.4.0
-aiohttp @ file:///home/conda/feedstock_root/build_artifacts/aiohttp_1603665977848/work
+aiohttp==3.7.1
 anndata==0.7.8
 annoy==1.17.0
-appdirs @ file:///home/conda/feedstock_root/build_artifacts/appdirs_1603108395799/work
-argcomplete @ file:///home/conda/feedstock_root/build_artifacts/argcomplete_1606202836286/work
+appdirs==1.4.4
+argcomplete==1.12.2
 argon2-cffi==20.1.0
 asgiref==3.2.7
-asn1crypto @ file:///home/conda/feedstock_root/build_artifacts/asn1crypto_1595949944546/work
+asn1crypto==1.4.0
 async-generator==1.10
 async-timeout==3.0.1
 atomicwrites==1.4.0
@@ -15,45 +15,45 @@ backcall==0.2.0
 backports.functools-lru-cache==1.6.1
 bamread==0.0.11
 bcbio-gff==0.6.6
-bcrypt @ file:///home/conda/feedstock_root/build_artifacts/bcrypt_1602546543335/work
+bcrypt==3.2.0
 beautifulsoup4==4.9.1
 bio-assembly-refinement==0.5.1
 biopython==1.76
 bleach==3.2.1
-boto3 @ file:///home/conda/feedstock_root/build_artifacts/boto3_1603491437488/work
-botocore @ file:///home/conda/feedstock_root/build_artifacts/botocore_1603488139654/work
+boto3==1.16.4
+botocore==1.19.4
 brotlipy==0.7.0
 BUSCO==5.0.0
 bx-python==0.8.8
 cached-property==1.5.2
-cachetools @ file:///home/conda/feedstock_root/build_artifacts/cachetools_1593420445823/work
+cachetools==4.1.1
 certifi==2020.6.20
 cffi==1.14.1
-cgecore @ file:///opt/conda/conda-bld/cgecore_1604319091913/work
+cgecore==1.5.6
 chardet==3.0.4
 circlator==1.5.5
 CITE-seq-Count==1.4.3
 click==7.1.2
-cloudpickle @ file:///tmp/build/80754af9/cloudpickle_1598884132938/work
-coloredlogs @ file:///home/conda/feedstock_root/build_artifacts/coloredlogs_1607627974376/work
+cloudpickle==1.6.0
+coloredlogs==15.0
 ConfigArgParse==1.2.3
 configobj==5.0.6
 cryptography==3.0
 cycler==0.10.0
 Cython==0.29.21
 datatable==0.11.1
-datrie @ file:///home/conda/feedstock_root/build_artifacts/datrie_1602583311724/work
+datrie==0.8.2
 debtcollector==2.2.0
 decorator==4.4.2
 defusedxml==0.6.0
 dill==0.3.2
 Django==3.0.3
-docker @ file:///home/conda/feedstock_root/build_artifacts/docker-py_1608677400312/work
+docker==4.4.1
 docker-pycreds==0.4.0
 docopt==0.6.2
-docutils @ file:///home/conda/feedstock_root/build_artifacts/docutils_1602628168395/work
+docutils==0.16
 drmaa==0.7.9
-dropbox @ file:///home/conda/feedstock_root/build_artifacts/dropbox_1600167981746/work
+dropbox==10.4.1
 edlib==1.3.9
 entrypoints==0.3
 et-xmlfile==1.0.1
@@ -65,23 +65,23 @@ flatten-json==0.1.13
 ftputil==3.2
 future==0.18.2
 GenomicConsensus==2.3.3
-genson @ file:///tmp/build/80754af9/genson_1600358620201/work
+genson==1.2.2
 get_version==2.1
-gitdb @ file:///home/conda/feedstock_root/build_artifacts/gitdb_1588651542737/work
-GitPython @ file:///home/conda/feedstock_root/build_artifacts/gitpython_1599191045865/work
-goatools @ file:///opt/conda/conda-bld/goatools_1607886555949/work
-google-api-core @ file:///Users/runner/miniforge3/conda-bld/google-api-core-split_1603228028777/work
-google-auth @ file:///home/conda/feedstock_root/build_artifacts/google-auth_1601485373217/work
-google-cloud-core @ file:///home/conda/feedstock_root/build_artifacts/google-cloud-core_1602093568796/work
-google-cloud-storage @ file:///home/conda/feedstock_root/build_artifacts/google-cloud-storage_1603224504892/work
-google-crc32c @ file:///home/conda/feedstock_root/build_artifacts/google-crc32c_1602546489161/work
-google-resumable-media @ file:///home/conda/feedstock_root/build_artifacts/google-resumable-media_1602011069843/work
-googleapis-common-protos @ file:///home/conda/feedstock_root/build_artifacts/googleapis-common-protos-feedstock_1601483877112/work
-grpcio @ file:///home/conda/feedstock_root/build_artifacts/grpcio_1596715630577/work
+gitdb==4.0.5
+GitPython==3.1.8
+goatools==1.0.15
+google-api-core==1.23.0
+google-auth==1.22.0
+google-cloud-core==1.4.3
+google-cloud-storage==1.32.0
+google-crc32c==1.0.0
+google-resumable-media==1.1.0
+googleapis-common-protos==1.52.0
+grpcio==1.31.0
 h5py==3.1.0
-humanfriendly @ file:///home/conda/feedstock_root/build_artifacts/humanfriendly_1607568759011/work
+humanfriendly==9.1
 idna==2.10
-idna-ssl @ file:///home/conda/feedstock_root/build_artifacts/idna_ssl_1602585794775/work
+idna-ssl==1.1.0
 igraph==0.1.11
 imageio==2.9.0
 importlib-metadata==1.7.0
@@ -98,7 +98,7 @@ jeepney==0.4.3
 jellyfish==0.6.1
 jgraph==0.2.1
 Jinja2==2.11.2
-jmespath @ file:///home/conda/feedstock_root/build_artifacts/jmespath_1589369830981/work
+jmespath==0.10.0
 joblib==0.17.0
 jsonschema==3.2.0
 jupyter==1.0.0
@@ -122,10 +122,10 @@ MarkupSafe==1.1.1
 matplotlib==3.3.1
 miniwdl==1.1.4.dev1
 mistune==0.8.4
-mock @ file:///home/conda/feedstock_root/build_artifacts/mock_1602394908861/work
+mock==4.0.2
 mplcursors==0.3
 msgpack==1.0.0
-multidict @ file:///home/conda/feedstock_root/build_artifacts/multidict_1602413127978/work
+multidict==4.7.5
 multiprocess==0.70.10
 mysql-connector-python==8.0.28
 nanoget==1.12.2
@@ -148,7 +148,7 @@ numpy==1.19.1
 numpy-groupies==0.9.20
 odfpy==1.4.1
 olefile==0.46
-openpyxl @ file:///home/conda/feedstock_root/build_artifacts/openpyxl_1632332968451/work
+openpyxl==3.0.9
 os-service-types==1.7.0
 oslo.i18n==5.0.0
 oslo.serialization==4.0.0
@@ -157,16 +157,17 @@ packaging==20.4
 pandas==1.1.1
 pandocfilters==1.4.3
 Paralleltask==0.1.1
-paramiko @ file:///home/conda/feedstock_root/build_artifacts/paramiko_1598988093657/work
+paramiko==2.7.2
 parso==0.7.1
 patsy==0.5.1
 pauvre==0.1.86
 pbcommand==0.3.29
 pbr==5.4.5
 pexpect==4.8.0
-phylo-treetime @ file:///opt/conda/conda-bld/treetime_1637241530416/work
+phylo-treetime==0.8.5
 pickleshare==0.7.5
 Pillow==7.2.0
+pip==21.3.1
 plotly==4.5.1
 pluggy==0.13.1
 prettytable==0.7.2
@@ -183,7 +184,7 @@ pybedtools==0.8.2
 pybktree==1.1
 pycparser==2.20
 pycurl==7.45.1
-pydot @ file:///home/conda/feedstock_root/build_artifacts/pydot_1613571129126/work
+pydot==1.4.2
 pyfaidx==0.6.2
 pyfastaq==3.17.0
 Pygments==2.7.2
@@ -191,8 +192,8 @@ pygraphviz==1.3
 pygtail==0.11.1
 pymssql==2.2.4
 pymummer==0.11.0
-PyNaCl @ file:///home/conda/feedstock_root/build_artifacts/pynacl_1602614120019/work
-pyOpenSSL @ file:///tmp/build/80754af9/pyopenssl_1594392929924/work
+PyNaCl==1.4.0
+pyOpenSSL==19.1.0
 pypandoc==1.10
 pyparsing==2.4.7
 pyproj==3.0.1
@@ -210,11 +211,11 @@ pysftp==0.2.9
 PySocks==1.7.1
 pytest==4.1.0
 pytest-dependency==0.4.0
-python-dateutil @ file:///home/conda/feedstock_root/build_artifacts/python-dateutil_1626286286081/work
-python-docx @ file:///home/conda/feedstock_root/build_artifacts/python-docx_1622121039670/work
+python-dateutil==2.8.2
+python-docx==0.8.11
 python-igraph==0.9.1
 python-irodsclient==0.8.2
-python-json-logger @ file:///home/conda/feedstock_root/build_artifacts/python-json-logger_1602545356084/work
+python-json-logger==2.0.1
 python-Levenshtein==0.12.0
 python-louvain==0.15
 python-lzo==1.12
@@ -225,38 +226,39 @@ PyYAML==5.3.1
 pyzmq==19.0.2
 qtconsole==4.7.7
 QtPy==1.9.0
-ratelimiter @ file:///home/conda/feedstock_root/build_artifacts/ratelimiter_1602593436172/work
+ratelimiter==1.2.0
 recycler==0.62
-regex @ file:///home/conda/feedstock_root/build_artifacts/regex_1605270926737/work
+regex==2020.11.13
 reportlab==3.5.32
 requests==2.24.0
 retrying==1.3.3
 rsa==3.1.4
-ruamel.yaml @ file:///home/conda/feedstock_root/build_artifacts/ruamel.yaml_1605989959148/work
-ruamel.yaml.clib @ file:///home/conda/feedstock_root/build_artifacts/ruamel.yaml.clib_1605537754586/work
+ruamel.yaml==0.16.12
+ruamel.yaml.clib==0.2.2
 runner==0.0.0
-s3transfer @ file:///drone/src/build_artifacts/s3transfer_1602877463089/work
+s3transfer==0.3.3
 scanpy==1.7.2
 scikit-image==0.17.2
 scikit-learn==0.23.2
 scipy==1.5.2
-scrublet @ file:///home/denovo/build/scrublet
+scrublet==0.2.2
 scvelo==0.2.5
 seaborn==0.11.1
 SecretStorage==3.1.2
-selenium @ file:///home/conda/feedstock_root/build_artifacts/selenium_1610664466485/work
+selenium==3.141.0
 Send2Trash==1.5.0
+setuptools==44.0.0.post20200102
 simplegeneric==0.8.1
 simplejson==3.17.2
 sinfo==0.3.4
 six==1.14.0
-smmap @ file:///home/conda/feedstock_root/build_artifacts/smmap_1588651577140/work
+smmap==3.0.4
 snakemake==5.3.0
 snaptools==1.4.8
 sorted-nearest==0.0.37
-sortedcontainers @ file:///home/conda/feedstock_root/build_artifacts/sortedcontainers_1605110889605/work
+sortedcontainers==2.3.0
 soupsieve==2.0.1
-SQLAlchemy @ file:///tmp/build/80754af9/sqlalchemy_1598374765781/work
+SQLAlchemy==1.3.19
 sqlparse==0.3.1
 staramr==0.5.1
 statsmodels==0.12.2
@@ -268,7 +270,7 @@ tablib==3.1.0
 tabpy-client==0.2
 tabpy-server==0.2
 tabulate==0.8.9
-talon @ file:///ess/dlstibm/Workspace/workspace.chseo/Application/TALON
+talon==5.0
 terminado==0.9.1
 testpath==0.4.4
 texttable==1.6.3
@@ -276,7 +278,7 @@ threadpoolctl==2.1.0
 tifffile==2020.9.3
 tiptoft==1.0.0
 tornado==6.1
-Tornado-JSON @ file:///tmp/build/80754af9/tornado-json_1613996814851/work
+Tornado-JSON==1.3.4
 tqdm==4.59.0
 traitlets==4.3.3
 typing_extensions==4.1.1
@@ -285,15 +287,16 @@ umi-tools==1.0.0
 urllib3==1.25.10
 wcwidth==0.2.5
 webencodings==0.5.1
-websocket-client @ file:///home/conda/feedstock_root/build_artifacts/websocket-client_1610127645125/work
+websocket-client==0.57.0
 wget==3.2
+wheel==0.35.1
 widgetsnbextension==3.5.1
 wrapt==1.12.1
-xdg @ file:///home/conda/feedstock_root/build_artifacts/xdg_1605251629204/work
-xlrd @ file:///home/conda/feedstock_root/build_artifacts/xlrd_1610224409810/work
-XlsxWriter @ file:///home/conda/feedstock_root/build_artifacts/xlsxwriter_1602583799765/work
+xdg==5.0.1
+xlrd==2.0.1
+XlsxWriter==1.3.7
 xlwt==1.3.0
 xmlrunner==1.7.7
-yarl @ file:///tmp/build/80754af9/yarl_1598045023428/work
+yarl==1.5.1
 yattag==1.13.2
 zipp==3.1.0
