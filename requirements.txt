@@ -8,8 +8,6 @@ arrow==1.2.3
 async-timeout==4.0.2
 attmap==0.13.2
 attrs==22.1.0
-b2==3.8.1.dev13+g34463d0
-b2sdk==1.20.0
 backports.functools-lru-cache==1.6.4
 bcrypt==3.2.2
 biopython==1.79
@@ -40,7 +38,6 @@ defusedxml==0.7.1
 docutils==0.19
 docxtpl==0.11.5
 dpath==2.0.6
-dropbox==11.34.0
 et-xmlfile==1.0.1
 fastjsonschema==2.16.2
 filechunkio==1.8
