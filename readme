@@ -1,0 +1,15 @@
+# execute time : 2023-03-30 10:00:00 :
+ssh-keygen -t rsa -C "dragonb6874@naver.com" -f "id_rsa_dragonb"
+ssh-add ~/.ssh/id_rsa_dragonb
+
+eval $(ssh-agent)
+ssh -T git@github.com-dnalinkbi
+ssh -T git@github.com-dragonb6874
+
+git remote add dnalinkbi git@github.com-dnalinkbi:dnalinkbi/SARS-CoV-Dashboard.git
+git remote add dragonb6874 git@github.com-dragonb6874:dragonb6874/SARS-CoV-Dashboard.git
+
+# execute time : 2023-03-30 10:00:45 : 
+git push dragonb6874 +main
+
+
