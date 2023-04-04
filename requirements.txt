@@ -74,7 +74,6 @@ kaleido==0.2.1
 kiwisolver==1.4.4
 lockfile==0.12.2
 logfury==1.0.1
-logmuse==0.2.6
 lxml==4.8.0
 MarkupSafe==2.1.1
 matplotlib==3.6.2
