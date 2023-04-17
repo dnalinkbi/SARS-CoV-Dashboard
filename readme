@@ -17,10 +17,10 @@ pip list --format=freeze > requirements.txt
 heroku git:remote -a bsy-covid
 heroku buildpacks:set heroku/python
 heroku create --buildpack https://github.com/kennethreitz/conda-buildpack.git
-git push heroku main
+#git push heroku main
 
 git add .
 git commit -m "latest"
 git push dnalinkbi main
 git push dragonb6874 main
-git push heroku main
+#git push heroku main

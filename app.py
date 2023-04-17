@@ -573,5 +573,5 @@ def func(n_clicks_btn, df, download_type):
 
 
 if __name__ == '__main__':
-    app.run_server(host='211.174.205.41', port='8060', debug=True, use_reloader=True)
+    app.run_server(host='211.174.205.41', port='8050', debug=True, use_reloader=True)
 	#app.run_server()
