@@ -93,6 +93,7 @@ def clade_count(df):
 # COVID DATAFRAME
 covid = pd.concat([covid_table(input_file_list("./input_report_files/2022/")).assign(year='2022'),
                    covid_table(input_file_list("./input_report_files/2023/")).assign(year='2023')])
+#print(covid[covid['sample'] == "30970543"])
 covid = covid.sort_values('totalreads').drop_duplicates('sample', keep='last')
 covid_groupby_clade = groupby_clade(covid)
 covid_qcgood_groupby_clade = groupby_clade(QC_table(covid, "good"))
